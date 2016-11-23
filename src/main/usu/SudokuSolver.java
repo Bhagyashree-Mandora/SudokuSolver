@@ -8,6 +8,8 @@ import main.usu.model.SudokuPuzzle;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -22,15 +24,16 @@ public class SudokuSolver {
         System.out.print("Enter output file name: ");
         String outputFileName = scanner.next();
 
-        int [][] puzzle = null;
+        String[][] puzzle = null;
+        List<String> domain = new ArrayList<>();
         try {
             BufferedReader br = new BufferedReader(new FileReader(inputFileName));
 
             int side = Integer.valueOf(br.readLine());
-            String[] domain = br.readLine().split(" ");
+            domain.addAll(Arrays.asList(br.readLine().split(" ")));
 
             String line = br.readLine();
-            puzzle = new int[side][];
+            puzzle = new String[side][];
             puzzle[0] = readRow(line, side);
 
             int rowNum = 1;
@@ -45,7 +48,7 @@ public class SudokuSolver {
             e.printStackTrace();
         }
 
-        SudokuPuzzle sudokuPuzzle = new SudokuPuzzle(puzzle);
+        SudokuPuzzle sudokuPuzzle = new SudokuPuzzle(puzzle, domain);
 
         SudokuAlgorithm algorithm = null;
 
@@ -69,15 +72,15 @@ public class SudokuSolver {
         }
     }
 
-    private static int[] readRow(String line, int side) {
-        int[] row = new int[side];
+    private static String[] readRow(String line, int side) {
+        String[] row = new String[side];
         String[] elements = line.split(" ");
         if (elements.length != side) {
             System.out.println("Incorrect Input");
             System.exit(1);
         }
         for (int i = 0; i < elements.length; i++) {
-            row[i] = Integer.valueOf(elements[i]);
+            row[i] = elements[i];
         }
         return row;
     }

@@ -12,7 +12,7 @@ public abstract class SudokuAlgorithm {
     private double start;
     private double stop;
 
-    public abstract LinkedList<Inference> getInferences(SudokuPuzzle sudokuPuzzle, Index unassigned, int value);
+    public abstract LinkedList<Inference> getInferences(SudokuPuzzle sudokuPuzzle, Index unassigned, String value);
 
     public SudokuPuzzle solve(SudokuPuzzle puzzle) {
         startTimer();
@@ -25,6 +25,7 @@ public abstract class SudokuAlgorithm {
         if (start != 0) {
             stop = System.currentTimeMillis();
         }
+        System.out.println("Total time taken: " + (stop - start));
     }
 
     private void startTimer() {
@@ -37,11 +38,11 @@ public abstract class SudokuAlgorithm {
         }
 
         Index unassigned = selectUnAssignedVariable(puzzle);
-        LinkedList<Integer> domainValues = orderDomainValues(unassigned, puzzle);
+        LinkedList<String> domainValues = orderDomainValues(unassigned, puzzle);
 
-        for (Integer domainValue : domainValues) {
+        for (String domainValue : domainValues) {
             LinkedList<Inference> inferences = null;
-            int value = domainValue;
+            String value = domainValue;
             puzzle.set(unassigned.getRow(), unassigned.getCol(), value);
 
             if (isGoodSoFar(puzzle)) {
@@ -66,14 +67,14 @@ public abstract class SudokuAlgorithm {
         return null;
     }
 
-    private LinkedList<Integer> orderDomainValues(Index var, SudokuPuzzle puzzle) {
+    private LinkedList<String> orderDomainValues(Index var, SudokuPuzzle puzzle) {
         return puzzle.getDomain(var.getRow(), var.getCol());
     }
 
     private Index selectUnAssignedVariable(SudokuPuzzle puzzle) {
         for (int row = 0; row < puzzle.puzzleSide; row++) {
             for (int col = 0; col < puzzle.puzzleSide; col++) {
-                if (puzzle.get(row, col) == 0) {
+                if (puzzle.get(row, col).equals("-")) {
                     return new Index(row, col);
                 }
             }
@@ -84,7 +85,7 @@ public abstract class SudokuAlgorithm {
     private boolean isFilledIn(SudokuPuzzle puzzle) {
         for (int row = 0; row < puzzle.puzzleSide; row++) {
             for (int col = 0; col < puzzle.puzzleSide; col++) {
-                if (puzzle.get(row, col) == 0) {
+                if (puzzle.get(row, col).equals("-")) {
                     return false;
                 }
             }
@@ -118,7 +119,7 @@ public abstract class SudokuAlgorithm {
 		/* Check each unit */
         for (int uRow = 0; uRow < puzzle.unitSide; uRow++) {
             for (int uCol = 0; uCol < puzzle.unitSide; uCol++) {
-                int[] nums = new int[9];
+                String[] nums = new String[puzzle.puzzleSide];
                 int startRow = uRow * puzzle.unitSide;
                 int startCol = uCol * puzzle.unitSide;
                 int endRow = startRow + puzzle.unitSide;
@@ -134,7 +135,7 @@ public abstract class SudokuAlgorithm {
                 Arrays.sort(nums);
 
                 for (int i = 1; i < at; i++) {
-                    if (nums[i] != 0 && nums[i - 1] != 0 && nums[i] == nums[i - 1]) {
+                    if (!nums[i].equals("-") && !nums[i - 1].equals("-") && nums[i].equals(nums[i - 1])) {
                         return false;
                     }
                 }
@@ -143,7 +144,7 @@ public abstract class SudokuAlgorithm {
 
 		/* Check each row */
         for (int row = 0; row < puzzle.puzzleSide; row++) {
-            int[] nums = new int[9];
+            String[] nums = new String[puzzle.puzzleSide];
 
             for (int col = 0; col < puzzle.puzzleSide; col++) {
                 nums[col] = puzzle.get(row, col);
@@ -152,7 +153,7 @@ public abstract class SudokuAlgorithm {
             Arrays.sort(nums);
 
             for (int i = 1; i < nums.length; i++) {
-                if (nums[i] != 0 && nums[i - 1] != 0 && nums[i] == nums[i - 1]) {
+                if (!nums[i].equals("-") && !nums[i - 1].equals("-") && nums[i].equals(nums[i - 1])) {
                     return false;
                 }
             }
@@ -160,7 +161,7 @@ public abstract class SudokuAlgorithm {
 
 		/* Check each column */
         for (int col = 0; col < puzzle.puzzleSide; col++) {
-            int[] nums = new int[9];
+            String[] nums = new String[puzzle.puzzleSide];
 
             for (int row = 0; row < puzzle.puzzleSide; row++) {
                 nums[row] = puzzle.get(row, col);
@@ -169,7 +170,7 @@ public abstract class SudokuAlgorithm {
             Arrays.sort(nums);
 
             for (int i = 1; i < nums.length; i++) {
-                if (nums[i] != 0 && nums[i - 1] != 0 && nums[i] == nums[i - 1]) {
+                if (!nums[i].equals("-") && !nums[i - 1].equals("-") && nums[i].equals(nums[i - 1])) {
                     return false;
                 }
             }

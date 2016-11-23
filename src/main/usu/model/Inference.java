@@ -1,9 +1,9 @@
 package main.usu.model;
 
 public class Inference extends Index {
-    private int exclusion;
+    private String exclusion;
 
-    public Inference(int row, int col, int exclusion) {
+    public Inference(int row, int col, String exclusion) {
         super(row, col);
         this.exclusion = exclusion;
     }
@@ -17,7 +17,7 @@ public class Inference extends Index {
         return super.toString() + "-" + exclusion;
     }
 
-    public int getExclusion() {
+    public String getExclusion() {
         return exclusion;
     }
 }

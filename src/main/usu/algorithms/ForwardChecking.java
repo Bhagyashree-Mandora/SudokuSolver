@@ -8,12 +8,12 @@ import java.util.LinkedList;
 
 public class ForwardChecking extends SudokuAlgorithm {
 
-    public LinkedList<Inference> forwardCheckInferences(SudokuPuzzle puzzle, Index assigned, int value) {
+    public LinkedList<Inference> forwardCheckInferences(SudokuPuzzle puzzle, Index assigned, String value) {
         LinkedList<Inference> inferences = new LinkedList<Inference>();
 
 		/* Flush domain for current square */
-        for (int i = 1; i <= 9; i++) {
-            if (i != value) {
+        for (String i : puzzle.getPossibleValues()) {
+            if (!value.equals(i)) {
                 addInference(puzzle, inferences, assigned.getRow(), assigned.getCol(), i);
             }
         }
@@ -61,7 +61,7 @@ public class ForwardChecking extends SudokuAlgorithm {
         return inferences;
     }
 
-    private boolean addInference(SudokuPuzzle puzzle, LinkedList<Inference> inferences, int row, int col, int value) {
+    private boolean addInference(SudokuPuzzle puzzle, LinkedList<Inference> inferences, int row, int col, String value) {
         Inference newInference = new Inference(row, col, value);
 
         if (!inferences.contains(newInference) && puzzle.inDomain(row, col, value)) {
@@ -75,7 +75,7 @@ public class ForwardChecking extends SudokuAlgorithm {
     }
 
     @Override
-    public LinkedList<Inference> getInferences(SudokuPuzzle sudokuPuzzle, Index unassigned, int value) {
+    public LinkedList<Inference> getInferences(SudokuPuzzle sudokuPuzzle, Index unassigned, String value) {
         return forwardCheckInferences(sudokuPuzzle, unassigned, value);
     }
 }

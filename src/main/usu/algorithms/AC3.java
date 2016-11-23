@@ -64,14 +64,14 @@ public class AC3 extends SudokuAlgorithm {
     private boolean revise(SudokuPuzzle puzzle, Index i, Index j) {
         boolean revised = false;
 
-        LinkedList<Integer> domainI = puzzle.getDomainCopy(i.getRow(), i.getCol());
-        LinkedList<Integer> domainJ = puzzle.getDomain(j.getRow(), j.getCol());
+        LinkedList<String> domainI = puzzle.getDomainCopy(i.getRow(), i.getCol());
+        LinkedList<String> domainJ = puzzle.getDomain(j.getRow(), j.getCol());
 
-        for (Integer x : domainI) {
+        for (String x : domainI) {
             boolean satisfiable = false;
 
-            for (Integer y : domainJ) {
-                if ((int) y != (int) x) {
+            for (String y : domainJ) {
+                if (!y.equals(x)) {
                     satisfiable = true;
                 }
             }
@@ -120,7 +120,7 @@ public class AC3 extends SudokuAlgorithm {
     }
 
     @Override
-    public LinkedList<Inference> getInferences(SudokuPuzzle sudokuPuzzle, Index unassigned, int value) {
+    public LinkedList<Inference> getInferences(SudokuPuzzle sudokuPuzzle, Index unassigned, String value) {
         if(solveAC3(sudokuPuzzle)) {
             return new LinkedList<>();
         }

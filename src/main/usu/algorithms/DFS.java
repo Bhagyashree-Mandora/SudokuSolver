@@ -8,7 +8,7 @@ import java.util.LinkedList;
 
 public class DFS extends SudokuAlgorithm {
     @Override
-    public LinkedList<Inference> getInferences(SudokuPuzzle sudokuPuzzle, Index unassigned, int value) {
+    public LinkedList<Inference> getInferences(SudokuPuzzle sudokuPuzzle, Index unassigned, String value) {
         return new LinkedList<>();
     }
 }
