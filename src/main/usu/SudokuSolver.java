@@ -39,7 +39,7 @@ public class SudokuSolver {
             int rowNum = 1;
             while ((line = br.readLine()) != null) {
                 if (rowNum >= side) {
-                    System.out.println("Incorrect Input");
+                    System.out.println("Bad Puzzle");
                     System.exit(1);
                 }
                 puzzle[rowNum++] = readRow(line, side);
@@ -66,7 +66,7 @@ public class SudokuSolver {
         SudokuPuzzle solution = algorithm.solve(sudokuPuzzle);
 
         if (solution == null) {
-            System.out.println("No solution");
+            System.out.println("Unsolvable");
         } else {
             solution.print();
         }
@@ -76,7 +76,7 @@ public class SudokuSolver {
         String[] row = new String[side];
         String[] elements = line.split(" ");
         if (elements.length != side) {
-            System.out.println("Incorrect Input");
+            System.out.println("Bad Puzzle");
             System.exit(1);
         }
         for (int i = 0; i < elements.length; i++) {

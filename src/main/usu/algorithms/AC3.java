@@ -1,8 +1,8 @@
 package main.usu.algorithms;
 
-import main.usu.model.Index;
+import main.usu.model.Position;
 import main.usu.model.Inference;
-import main.usu.model.PriorityQueue;
+import main.usu.utils.PriorityQueue;
 import main.usu.model.SudokuPuzzle;
 
 import java.util.LinkedList;
@@ -10,11 +10,11 @@ import java.util.LinkedList;
 public class AC3 extends SudokuAlgorithm {
 
     private boolean solveAC3(SudokuPuzzle puzzle) {
-        PriorityQueue<Index[]> arcs = new PriorityQueue<Index[]>();
+        PriorityQueue<Position[]> arcs = new PriorityQueue<Position[]>();
         prepareQueue(puzzle, arcs);
 
         while (arcs.size() > 0) {
-            Index[] edge = arcs.dequeue();
+            Position[] edge = arcs.dequeue();
 
             if (!revise(puzzle, edge[0], edge[1])) {
                 continue;
@@ -30,30 +30,30 @@ public class AC3 extends SudokuAlgorithm {
             }
 
 			/* Queue squares in current unit */
-            int startRow = (assignedRow / puzzle.unitSide) * puzzle.unitSide;
-            int startCol = (assignedCol / puzzle.unitSide) * puzzle.unitSide;
-            int endRow = startRow + puzzle.unitSide;
-            int endCol = startCol + puzzle.unitSide;
+            int startRow = (assignedRow / puzzle.getUnitSide()) * puzzle.getUnitSide();
+            int startCol = (assignedCol / puzzle.getUnitSide()) * puzzle.getUnitSide();
+            int endRow = startRow + puzzle.getUnitSide();
+            int endCol = startCol + puzzle.getUnitSide();
 
             for (int row = startRow; row < endRow; row++) {
                 for (int col = startCol; col < endCol; col++) {
                     if (row != assignedRow && col != assignedCol && row != otherRow && col != otherCol) {
-                        arcs.enqueue(new Index[] { new Index(row, col), new Index(assignedRow, assignedCol) });
+                        arcs.enqueue(new Position[] { new Position(row, col), new Position(assignedRow, assignedCol) });
                     }
                 }
             }
 
 			/* Queue squares in current row */
-            for (int row = 0; row < puzzle.puzzleSide; row++) {
+            for (int row = 0; row < puzzle.getPuzzleSide(); row++) {
                 if (row != assignedRow && row != otherRow) {
-                    arcs.enqueue(new Index[] { new Index(row, assignedCol), new Index(assignedRow, assignedCol) });
+                    arcs.enqueue(new Position[] { new Position(row, assignedCol), new Position(assignedRow, assignedCol) });
                 }
             }
 
 			/* Queue squares in current column */
-            for (int col = 0; col < puzzle.puzzleSide; col++) {
+            for (int col = 0; col < puzzle.getPuzzleSide(); col++) {
                 if (col != assignedCol && col != otherCol) {
-                    arcs.enqueue(new Index[] { new Index(assignedRow, col), new Index(assignedRow, assignedCol) });
+                    arcs.enqueue(new Position[] { new Position(assignedRow, col), new Position(assignedRow, assignedCol) });
                 }
             }
         }
@@ -61,7 +61,7 @@ public class AC3 extends SudokuAlgorithm {
         return true;
     }
 
-    private boolean revise(SudokuPuzzle puzzle, Index i, Index j) {
+    private boolean revise(SudokuPuzzle puzzle, Position i, Position j) {
         boolean revised = false;
 
         LinkedList<String> domainI = puzzle.getDomainCopy(i.getRow(), i.getCol());
@@ -85,34 +85,34 @@ public class AC3 extends SudokuAlgorithm {
         return revised;
     }
 
-    private void prepareQueue(SudokuPuzzle puzzle, PriorityQueue<Index[]> arcs) {
-        for (int assignedRow = 0; assignedRow < puzzle.puzzleSide; assignedRow++) {
-            for (int assignedCol = 0; assignedCol < puzzle.puzzleSide; assignedCol++) {
+    private void prepareQueue(SudokuPuzzle puzzle, PriorityQueue<Position[]> arcs) {
+        for (int assignedRow = 0; assignedRow < puzzle.getPuzzleSide(); assignedRow++) {
+            for (int assignedCol = 0; assignedCol < puzzle.getPuzzleSide(); assignedCol++) {
 				/* Queue squares in current unit */
-                int startRow = (assignedRow / puzzle.unitSide) * puzzle.unitSide;
-                int startCol = (assignedCol / puzzle.unitSide) * puzzle.unitSide;
-                int endRow = startRow + puzzle.unitSide;
-                int endCol = startCol + puzzle.unitSide;
+                int startRow = (assignedRow / puzzle.getUnitSide()) * puzzle.getUnitSide();
+                int startCol = (assignedCol / puzzle.getUnitSide()) * puzzle.getUnitSide();
+                int endRow = startRow + puzzle.getUnitSide();
+                int endCol = startCol + puzzle.getUnitSide();
 
                 for (int row = startRow; row < endRow; row++) {
                     for (int col = startCol; col < endCol; col++) {
                         if (row != assignedRow && col != assignedCol) {
-                            arcs.enqueue(new Index[] { new Index(row, col), new Index(assignedRow, assignedCol) });
+                            arcs.enqueue(new Position[] { new Position(row, col), new Position(assignedRow, assignedCol) });
                         }
                     }
                 }
 
 				/* Queue squares in current row */
-                for (int row = 0; row < puzzle.puzzleSide; row++) {
+                for (int row = 0; row < puzzle.getPuzzleSide(); row++) {
                     if (row != assignedRow) {
-                        arcs.enqueue(new Index[] { new Index(row, assignedCol), new Index(assignedRow, assignedCol) });
+                        arcs.enqueue(new Position[] { new Position(row, assignedCol), new Position(assignedRow, assignedCol) });
                     }
                 }
 
 				/* Queue squares in current column */
-                for (int col = 0; col < puzzle.puzzleSide; col++) {
+                for (int col = 0; col < puzzle.getPuzzleSide(); col++) {
                     if (col != assignedCol) {
-                        arcs.enqueue(new Index[] { new Index(assignedRow, col), new Index(assignedRow, assignedCol) });
+                        arcs.enqueue(new Position[] { new Position(assignedRow, col), new Position(assignedRow, assignedCol) });
                     }
                 }
             }
@@ -120,7 +120,7 @@ public class AC3 extends SudokuAlgorithm {
     }
 
     @Override
-    public LinkedList<Inference> getInferences(SudokuPuzzle sudokuPuzzle, Index unassigned, String value) {
+    public LinkedList<Inference> getInferences(SudokuPuzzle sudokuPuzzle, Position unassigned, String value) {
         if(solveAC3(sudokuPuzzle)) {
             return new LinkedList<>();
         }

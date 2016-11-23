@@ -3,14 +3,10 @@ package main.usu.model;
 import java.util.*;
 
 public class SudokuPuzzle {
-	public int unitSide = 0;
-	public int puzzleSide = 0;
+	private int unitSide = 0;
+	private int puzzleSide = 0;
 	private PuzzleValue[][] puzzle;
 	private List<String> possibleValues = new ArrayList<>();
-
-	public List<String> getPossibleValues() {
-		return possibleValues;
-	}
 
 	private class PuzzleValue {
 		String value;
@@ -38,6 +34,18 @@ public class SudokuPuzzle {
 		public String toString() {
 			return this.value + "";
 		}
+	}
+
+	public int getUnitSide() {
+		return unitSide;
+	}
+
+	public int getPuzzleSide() {
+		return puzzleSide;
+	}
+
+	public List<String> getPossibleValues() {
+		return possibleValues;
 	}
 
 	private PuzzleValue nil() {

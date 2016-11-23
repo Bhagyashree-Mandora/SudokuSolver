@@ -1,6 +1,6 @@
 package main.usu.model;
 
-public class Inference extends Index {
+public class Inference extends Position {
     private String exclusion;
 
     public Inference(int row, int col, String exclusion) {

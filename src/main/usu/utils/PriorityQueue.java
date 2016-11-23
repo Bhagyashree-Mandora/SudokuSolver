@@ -1,4 +1,4 @@
-package main.usu.model;
+package main.usu.utils;
 
 import java.util.LinkedList;
 
