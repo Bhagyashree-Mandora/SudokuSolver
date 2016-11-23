@@ -11,6 +11,7 @@ public abstract class SudokuAlgorithm {
 
     private double start;
     private double stop;
+    private long numberOfSteps;
 
     public abstract LinkedList<Inference> getInferences(SudokuPuzzle sudokuPuzzle, Index unassigned, String value);
 
@@ -25,7 +26,8 @@ public abstract class SudokuAlgorithm {
         if (start != 0) {
             stop = System.currentTimeMillis();
         }
-        System.out.println("Total time taken: " + (stop - start));
+        System.out.println("Total Time Taken: " + ((stop - start) / 1000) + " secs");
+        System.out.println("Number of Steps: " + numberOfSteps);
     }
 
     private void startTimer() {
@@ -44,6 +46,7 @@ public abstract class SudokuAlgorithm {
             LinkedList<Inference> inferences = null;
             String value = domainValue;
             puzzle.set(unassigned.getRow(), unassigned.getCol(), value);
+            numberOfSteps++;
 
             if (isGoodSoFar(puzzle)) {
                 inferences = getInferences(puzzle, unassigned, value);

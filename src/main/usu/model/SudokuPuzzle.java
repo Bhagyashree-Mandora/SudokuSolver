@@ -53,17 +53,6 @@ public class SudokuPuzzle {
 			}
 			this.puzzle[r] = row;
 		}
-//		this.puzzle = new PuzzleValue[][]{
-//			{ nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil() },
-//			{ nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil() },
-//			{ nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil() },
-//			{ nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil() },
-//			{ nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil() },
-//			{ nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil() },
-//			{ nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil() },
-//			{ nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil() },
-//			{ nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil(), nil() }
-//		};
 	}
 
 	public SudokuPuzzle(String[][] puzzle, List<String> possibleValues) {
