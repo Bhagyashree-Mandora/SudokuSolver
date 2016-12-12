@@ -2,8 +2,9 @@ package main.usu.model;
 
 import java.util.*;
 
-public class SudokuPuzzle {
-	private int unitSide = 0;
+public class SudokuPuzzle extends Observable {
+    public static final String NIL = "-";
+    private int unitSide = 0;
 	private int puzzleSide = 0;
 	private PuzzleValue[][] puzzle;
 	private List<String> possibleValues = new ArrayList<>();
@@ -49,7 +50,7 @@ public class SudokuPuzzle {
 	}
 
 	private PuzzleValue nil() {
-		return new PuzzleValue("-", this.possibleValues);
+		return new PuzzleValue(NIL, this.possibleValues);
 	}
 
 	private void makePuzzle() {
@@ -71,7 +72,10 @@ public class SudokuPuzzle {
 
 		for (int r = 0; r < puzzle.length; r++) {
 			for (int c = 0; c < puzzle.length; c++) {
-				if (!puzzle[r][c].equals("-")) {
+				if (!puzzle[r][c].equals(NIL)) {
+				    if(!possibleValues.contains(puzzle[r][c])){
+				        throw new IllegalArgumentException();
+                    }
 					this.puzzle[r][c] = new PuzzleValue(puzzle[r][c], possibleValues, true);
 				}
 			}
@@ -95,12 +99,16 @@ public class SudokuPuzzle {
 		return this.puzzle[row][col].domain;
 	}
 
-	public void set(int row, int col, String value) {
+    public void set(int row, int col, String value) {
 		this.puzzle[row][col] = new PuzzleValue(value, this.possibleValues);
+        setChanged();
+        notifyObservers(new Inference(row, col, value));
 	}
 
 	public void unset(int row, int col) {
 		this.puzzle[row][col] = nil();
+        setChanged();
+        notifyObservers(new Inference(row, col, NIL));
 	}
 
 	public LinkedList<String> getDomainCopy(int row, int col) {

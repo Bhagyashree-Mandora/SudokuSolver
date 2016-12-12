@@ -1,23 +1,23 @@
 package main.usu.model;
 
 public class Inference extends Position {
-    private String exclusion;
+    private String value;
 
-    public Inference(int row, int col, String exclusion) {
+    public Inference(int row, int col, String value) {
         super(row, col);
-        this.exclusion = exclusion;
+        this.value = value;
     }
 
     public boolean equals(Object otherObj) {
         Inference other = (Inference) otherObj;
-        return (this.row == other.row && this.col == other.col && this.exclusion == other.exclusion);
+        return (this.row == other.row && this.col == other.col && this.value == other.value);
     }
 
     public String toString() {
-        return super.toString() + "-" + exclusion;
+        return super.toString() + SudokuPuzzle.NIL + value;
     }
 
-    public String getExclusion() {
-        return exclusion;
+    public String getValue() {
+        return value;
     }
 }

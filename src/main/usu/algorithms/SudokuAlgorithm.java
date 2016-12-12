@@ -7,6 +7,8 @@ import main.usu.model.SudokuPuzzle;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import static java.lang.Thread.sleep;
+
 public abstract class SudokuAlgorithm {
 
     private double start;
@@ -22,7 +24,7 @@ public abstract class SudokuAlgorithm {
         return solution;
     }
 
-    private void stopTimer() {
+    protected void stopTimer() {
         if (start != 0) {
             stop = System.currentTimeMillis();
         }
@@ -30,11 +32,11 @@ public abstract class SudokuAlgorithm {
         System.out.println("Number of Steps: " + numberOfSteps);
     }
 
-    private void startTimer() {
+    protected void startTimer() {
         start = System.currentTimeMillis();
     }
 
-    private SudokuPuzzle backtrack(SudokuPuzzle puzzle) {
+    protected SudokuPuzzle backtrack(SudokuPuzzle puzzle) {
         if (isFilledIn(puzzle)) {
             return puzzle;
         }
@@ -46,6 +48,11 @@ public abstract class SudokuAlgorithm {
             LinkedList<Inference> inferences = null;
             String value = domainValue;
             puzzle.set(unassigned.getRow(), unassigned.getCol(), value);
+//            try {
+//                sleep(10);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
             numberOfSteps++;
 
             if (isGoodSoFar(puzzle)) {
@@ -70,14 +77,14 @@ public abstract class SudokuAlgorithm {
         return null;
     }
 
-    private LinkedList<String> orderDomainValues(Position var, SudokuPuzzle puzzle) {
+    protected LinkedList<String> orderDomainValues(Position var, SudokuPuzzle puzzle) {
         return puzzle.getDomain(var.getRow(), var.getCol());
     }
 
-    private Position selectUnAssignedVariable(SudokuPuzzle puzzle) {
+    public Position selectUnAssignedVariable(SudokuPuzzle puzzle) {
         for (int row = 0; row < puzzle.getPuzzleSide(); row++) {
             for (int col = 0; col < puzzle.getPuzzleSide(); col++) {
-                if (puzzle.get(row, col).equals("-")) {
+                if (puzzle.get(row, col).equals(SudokuPuzzle.NIL)) {
                     return new Position(row, col);
                 }
             }
@@ -85,10 +92,10 @@ public abstract class SudokuAlgorithm {
         return null;
     }
 
-    private boolean isFilledIn(SudokuPuzzle puzzle) {
+    public boolean isFilledIn(SudokuPuzzle puzzle) {
         for (int row = 0; row < puzzle.getPuzzleSide(); row++) {
             for (int col = 0; col < puzzle.getPuzzleSide(); col++) {
-                if (puzzle.get(row, col).equals("-")) {
+                if (puzzle.get(row, col).equals(SudokuPuzzle.NIL)) {
                     return false;
                 }
             }
@@ -96,29 +103,29 @@ public abstract class SudokuAlgorithm {
         return true;
     }
 
-    private void unapplyInferences(SudokuPuzzle puzzle, LinkedList<Inference> inferences) {
+    public void unapplyInferences(SudokuPuzzle puzzle, LinkedList<Inference> inferences) {
         if (inferences == null || inferences.size() == 0) {
             return;
         }
 
         for (Inference inference : inferences) {
-            if (!puzzle.inDomain(inference.getRow(), inference.getCol(), inference.getExclusion())) {
-                puzzle.addToDomain(inference.getRow(), inference.getCol(), inference.getExclusion());
+            if (!puzzle.inDomain(inference.getRow(), inference.getCol(), inference.getValue())) {
+                puzzle.addToDomain(inference.getRow(), inference.getCol(), inference.getValue());
             }
         }
     }
 
-    private void applyInferences(SudokuPuzzle puzzle, LinkedList<Inference> inferences) {
+    public void applyInferences(SudokuPuzzle puzzle, LinkedList<Inference> inferences) {
         if (inferences == null || inferences.size() == 0) {
             return;
         }
 
         for (Inference inference : inferences) {
-            puzzle.removeFromDomain(inference.getRow(), inference.getCol(), inference.getExclusion());
+            puzzle.removeFromDomain(inference.getRow(), inference.getCol(), inference.getValue());
         }
     }
 
-    private boolean isGoodSoFar(SudokuPuzzle puzzle) {
+    public boolean isGoodSoFar(SudokuPuzzle puzzle) {
 		/* Check each unit */
         for (int uRow = 0; uRow < puzzle.getUnitSide(); uRow++) {
             for (int uCol = 0; uCol < puzzle.getUnitSide(); uCol++) {
@@ -138,7 +145,7 @@ public abstract class SudokuAlgorithm {
                 Arrays.sort(nums);
 
                 for (int i = 1; i < at; i++) {
-                    if (!nums[i].equals("-") && !nums[i - 1].equals("-") && nums[i].equals(nums[i - 1])) {
+                    if (!nums[i].equals(SudokuPuzzle.NIL) && !nums[i - 1].equals(SudokuPuzzle.NIL) && nums[i].equals(nums[i - 1])) {
                         return false;
                     }
                 }
@@ -156,7 +163,7 @@ public abstract class SudokuAlgorithm {
             Arrays.sort(nums);
 
             for (int i = 1; i < nums.length; i++) {
-                if (!nums[i].equals("-") && !nums[i - 1].equals("-") && nums[i].equals(nums[i - 1])) {
+                if (!nums[i].equals(SudokuPuzzle.NIL) && !nums[i - 1].equals(SudokuPuzzle.NIL) && nums[i].equals(nums[i - 1])) {
                     return false;
                 }
             }
@@ -173,7 +180,7 @@ public abstract class SudokuAlgorithm {
             Arrays.sort(nums);
 
             for (int i = 1; i < nums.length; i++) {
-                if (!nums[i].equals("-") && !nums[i - 1].equals("-") && nums[i].equals(nums[i - 1])) {
+                if (!nums[i].equals(SudokuPuzzle.NIL) && !nums[i - 1].equals(SudokuPuzzle.NIL) && nums[i].equals(nums[i - 1])) {
                     return false;
                 }
             }
@@ -181,5 +188,4 @@ public abstract class SudokuAlgorithm {
 
         return true;
     }
-
 }
