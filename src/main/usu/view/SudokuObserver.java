@@ -8,8 +8,8 @@ import java.util.Observable;
 import java.util.Observer;
 
 public class SudokuObserver implements Observer {
-    SudokuPuzzle subject;
-    SudokuLayout layout;
+    private SudokuPuzzle subject;
+    private SudokuLayout layout;
 
     public SudokuObserver(SudokuPuzzle subject) {
         this.subject = subject;
