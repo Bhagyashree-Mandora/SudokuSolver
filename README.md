@@ -6,6 +6,7 @@ The user can input the Sudoku to be solved in a file with the first line giving 
 
 Example:  
 
+```
 16  
 1 2 3 4 5 6 7 8 9 A B C D E F G  
 7 1 - - A - E C - 3 2 - 6 - - 8  
@@ -24,7 +25,7 @@ C - E - 3 - A - B - - - - 7 - -
 B A - E - 2 - - G - 5 - - 1 9 -  
 4 - 6 - - - - - - - B - 8 E - G  
 5 D - - 1 - 3 8 - E 4 - 7 - - B  
-
+```
 
 Choice of algorithms:  
 - DFS  
